@@ -1,0 +1,27 @@
+---
+- vars:
+    haproxy_enable_stats: enable
+    haproxy_backend_servers:
+    #### Поменять ip
+    - {name: web1, ip: 10.211.55.30, port: 80}
+    - {name: web2, ip: 10.211.55.27, port: 80}
+    haproxy_stats_users:
+    - {username: nikolai, password: 123}
+
+  block:
+    - name: Установка HAproxy
+      apt:
+        name:
+        - haproxy
+        update-cache: true
+        cache_valid_time: 86400
+
+    - name: Создание config
+      template:
+        src: templates/haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
+
+    - name: Перезапуск сервиса
+      service: 
+        name: haproxy
+        state: restarted

@@ -1,0 +1,27 @@
+---
+- vars:
+    keepalived_interface: 'eth0'
+    keepalived_state: 'MASTER'
+    keepalived_virtual_router_id: '5'
+    keepalived_virtual_ip: '10.211.55.32/24'
+
+  block:
+    - name: Установка Keepalived
+      apt:
+        name:
+        - keepalived
+        update-cache: true
+        cache_valid_time: 86400
+
+    - name: Копирование config
+      template:
+        src: templates/keepalived.conf.j2
+        dest: /etc/keepalived/keepalived.conf
+
+
+    - name: Перезапуск сервиса
+      service: 
+        name: keepalived
+        state: restarted
+
+  become: true

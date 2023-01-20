@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>Api Key-Value</title>
+    </head>
+    <body>
+        <h1>Хранилище ключ значение</h1>
+        <article>
+
+            Прототип API хранилища ключ-значение.<br>
+            <br>Получить все данные хранилища WEB:
+            <br>http://127.0.0.1:3000/api/v1/storage/json/all<br>
+            <br>Получить все данные хранилища CURL:
+            <br>curl -i -X GET http://127.0.0.1:3000/api/v1/storage/json/all<br>
+            
+                <br>Получить данные хранилища по ключу WEB <br>
+                http://127.0.0.1:3000/api/v1/storage/json/read?key=test
+            <br>
+            <br>Получить данные хранилища по ключу CURL:<br>
+                curl -i -GET http://127.0.0.1:3000/api/v1/storage/json/read?key=test
+            <br>
+            <br>Добавить данные в хранилище WEB:<br>
+            curl -i -H "Content-Type: application/json" -X POST -d '{"test1": "value2"}' http://127.0.0.1:3000/api/v1/storage/json/write
+
+        </article>
+    </body>
+</html>

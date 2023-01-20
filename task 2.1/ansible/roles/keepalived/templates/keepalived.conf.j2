@@ -1,0 +1,17 @@
+vrrp_instance MY_KEEPALIVED {
+
+interface {{ keepalived_interface }}
+state {{ keepalived_state }}
+
+{% if inventory_hostname == 'loadbalancer1' %}
+priority: 100
+{% else %}
+priority: 90
+{% endif %}
+virtual_router_id {{ keepalived_virtual_router_id }}
+
+
+virtual_ipaddress {
+{{ keepalived_virtual_ip }} dev {{ keepalived_interface }} label {{ keepalived_interface }}:1
+}
+}

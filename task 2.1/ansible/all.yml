@@ -1,0 +1,22 @@
+---
+- name: Nginx
+  hosts: 
+   - webnginx
+  roles: 
+   - nginx
+  become: yes
+
+- name: HAproxy
+  hosts: 
+  - loadbalancer
+  roles: 
+  - haproxy
+  become: yes
+
+- name: Keepalived
+  hosts: 
+  - loadbalancer
+  roles: 
+  - keepalived
+  become: true
+

@@ -1,0 +1,100 @@
+---
+- name: Установка Docker
+  block:
+
+    - name: Установка дополнительных пакетов
+      apt:
+        name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg
+        - lsb-release
+        update-cache: true
+        cache_valid_time: 86400
+
+    - name: mkdir
+      command: mkdir -p /etc/apt/keyrings
+
+    - name: Добавление ключа Docker
+      apt_key: 
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+        keyring: /usr/share/keyrings/docker-archive-keyring.gpg
+
+    - name: Установка стабильного репозитория
+      apt_repository:
+        repo: >
+          deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg]
+          https://download.docker.com/linux/ubuntu
+          {{ ansible_distribution_release }} stable
+        state: present
+        update-cache: true
+        filename: docker
+
+    - name: Update apt 
+      apt:
+        upgrade: true
+        update-cache: true
+        cache_valid_time: 86400
+
+    - name: Установка Docker
+      apt:
+        name:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+        - docker-compose-plugin
+        state: present
+
+    - name: Docker check
+      service:
+        name: docker
+        state: restarted
+        enabled: true
+  become: true
+
+- name: Завершение установки Docker
+  block:
+    - name: Sudo Docker
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: true
+
+  become: true
+
+- name: Установка Docker-compose
+  block:
+    - name: Docker-compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/v2.15.1/docker-compose-linux-aarch64
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+
+    - name: Перезагрузка сервера
+      reboot:
+
+- name: Запуск контейнера Nginx
+  block: 
+    - name: Создание папки для nginx
+      file:
+        path: /home/vagrant/src_nginx/html
+        state: directory
+
+    - name: Копирование index
+      template:
+        src: templates/index.html.j2
+        dest: /home/vagrant/src_nginx/html/index.html
+
+    - name: Копирование docker-compose
+      copy:
+        src: files/docker-compose.yml
+        dest: /home/vagrant/src_nginx/docker-compose.yml
+
+    - name: Запуск Docker контейнера
+      shell:
+        cmd: "docker-compose up -d"
+        chdir: /home/vagrant/src_nginx
+
+  become: true
