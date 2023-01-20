@@ -3,8 +3,8 @@
     haproxy_enable_stats: enable
     haproxy_backend_servers:
     #### Поменять ip
-    - {name: web1, ip: 10.211.55.30, port: 80}
-    - {name: web2, ip: 10.211.55.27, port: 80}
+    - {name: web1, ip: 10.211.55.31, port: 80}
+    - {name: web2, ip: 10.211.55.32, port: 80}
     haproxy_stats_users:
     - {username: nikolai, password: 123}
 

@@ -3,7 +3,7 @@
     keepalived_interface: 'eth0'
     keepalived_state: 'MASTER'
     keepalived_virtual_router_id: '5'
-    keepalived_virtual_ip: '10.211.55.32/24'
+    keepalived_virtual_ip: '10.211.55.40/24'
 
   block:
     - name: Установка Keepalived

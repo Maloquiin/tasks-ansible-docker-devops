@@ -49,7 +49,7 @@ backend http_back
         balance roundrobin
         
         {% for server in haproxy_backend_servers %}
-        server {{server.name}} {{server.ip}}:{{server.port}}
+        server {{server.name}} {{server.ip}}:{{server.port}} check
         {% endfor %}
 
 #######################
